@@ -1,0 +1,8 @@
+# Lista de merchandise
+# Adicionar items aqui
+#
+# Exemplo:
+# - name: "T-Shirt Objeto Quase"
+#   price: "25,00 EUR"
+#   image: "/assets/images/merch/tshirt.jpg"
+#   url: "https://loja.objetoquase.pt/tshirt"

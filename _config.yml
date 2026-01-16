@@ -1,0 +1,29 @@
+# Site settings
+title: Objeto Quase
+description: Website oficial da banda Objeto Quase
+url: "https://objetoquase.pt"
+baseurl: ""
+lang: pt-PT
+
+# Build settings
+markdown: kramdown
+plugins:
+  - jekyll-seo-tag
+
+# Exclude files from build
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - CLAUDE.md
+  - vendor
+
+# Collections and defaults
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+
+# Site customization
+accent_color: "#c9a227"

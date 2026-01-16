@@ -1,0 +1,23 @@
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <span class="logo">{{ site.title }}</span>
+      </div>
+
+      {% if site.data.social %}
+      <div class="social-links">
+        {% for link in site.data.social %}
+        <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ link.name }}">
+          {{ link.name }}
+        </a>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; {{ 'now' | date: '%Y' }} {{ site.title }}. Todos os direitos reservados.</p>
+    </div>
+  </div>
+</footer>

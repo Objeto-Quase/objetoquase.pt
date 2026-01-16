@@ -1,0 +1,28 @@
+<section id="merch" class="section section-merch">
+  <div class="container">
+    <h2 class="section-title">Merch</h2>
+
+    {% if site.data.merch %}
+    <div class="merch-grid">
+      {% for item in site.data.merch %}
+      <article class="merch-card">
+        {% if item.image %}
+        <img src="{{ item.image | relative_url }}" alt="{{ item.name }}" class="merch-image">
+        {% else %}
+        <div class="merch-image placeholder"></div>
+        {% endif %}
+        <div class="merch-info">
+          <h3>{{ item.name }}</h3>
+          <span class="merch-price">{{ item.price }}</span>
+          {% if item.url %}
+          <a href="{{ item.url }}" target="_blank" rel="noopener noreferrer" class="btn btn-small">Comprar</a>
+          {% endif %}
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="coming-soon">Merch disponível em breve...</p>
+    {% endif %}
+  </div>
+</section>

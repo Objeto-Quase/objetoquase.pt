@@ -1,0 +1,13 @@
+# Lista de lançamentos musicais
+# Adicionar novos lançamentos aqui
+#
+# Exemplo:
+# - title: "Nome do Álbum"
+#   year: 2024
+#   type: "Álbum" # ou "EP", "Single"
+#   cover: "/assets/images/album-cover.jpg"
+#   links:
+#     - platform: "Spotify"
+#       url: "https://open.spotify.com/..."
+#     - platform: "Apple Music"
+#       url: "https://music.apple.com/..."
