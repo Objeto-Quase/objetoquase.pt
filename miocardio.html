@@ -9,6 +9,10 @@ permalink: /miocardio
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Miocárdio - Objeto Quase</title>
     <meta name="description" content="Descobre o teu cartão do amor com o quiz do Miocárdio">
+    <!-- Comic Neue - Comic Sans alternative that works on all devices -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -22,7 +26,7 @@ permalink: /miocardio
             justify-content: center;
             align-items: center;
             background-color: #e8a0b5; /* muted dusty pink */
-            font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
+            font-family: 'Comic Neue', 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
             color: #000;
             padding: 20px;
             /* lo-fi noise texture */
@@ -46,7 +50,7 @@ permalink: /miocardio
             position: absolute;
             color: #c44d78; /* muted red/pink */
             font-size: 30px;
-            font-family: Arial, sans-serif;
+            font-family: 'Comic Neue', 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
             opacity: 0.7;
         }
         .heart-1 { top: -15px; left: 10px; transform: rotate(-20deg); }
@@ -65,12 +69,12 @@ permalink: /miocardio
         }
 
         .title {
-            font-family: Impact, 'Arial Black', sans-serif;
+            font-family: 'Comic Neue', 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
             font-size: 2.5rem;
+            font-weight: bold;
             color: #a83a5c;
             text-transform: uppercase;
             margin-bottom: 5px;
-            -webkit-text-stroke: 1px #5a2a3a;
             text-shadow: 2px 2px 0 #f5e1e7;
         }
 
@@ -87,20 +91,21 @@ permalink: /miocardio
         }
 
         .question-number {
-            font-family: Arial, sans-serif;
+            font-family: 'Comic Neue', 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
             font-size: 0.8rem;
+            font-style: italic;
             color: #7a6a70;
             margin-bottom: 10px;
             text-transform: lowercase;
         }
 
         .question-text {
-            font-family: Impact, 'Arial Black', sans-serif;
+            font-family: 'Comic Neue', 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
             font-size: 1.5rem;
+            font-weight: bold;
             color: #8a4a60;
             margin-bottom: 25px;
             line-height: 1.3;
-            text-transform: none; /* less shouty */
         }
 
         .btn {
@@ -108,7 +113,7 @@ permalink: /miocardio
             width: 100%;
             padding: 18px 20px;
             font-size: 1.3rem;
-            font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
+            font-family: 'Comic Neue', 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
             border: 3px solid #000;
             cursor: pointer;
             margin: 12px 0;
@@ -127,8 +132,9 @@ permalink: /miocardio
         .btn-start {
             background-color: #c44d78;
             color: #FFF;
-            font-family: Impact, sans-serif;
+            font-family: 'Comic Neue', 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
             font-size: 1.5rem;
+            font-weight: bold;
             text-transform: uppercase;
             min-height: 60px;
             border-color: #8a3355;
@@ -148,8 +154,9 @@ permalink: /miocardio
 
         /* Result screen */
         .result-title {
-            font-family: Impact, sans-serif;
+            font-family: 'Comic Neue', 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
             font-size: 1.3rem;
+            font-weight: bold;
             color: #6a4a5a;
             margin-bottom: 15px;
             text-transform: lowercase;
@@ -200,7 +207,7 @@ permalink: /miocardio
 
         .result-card.loading::after {
             content: "a carregar...";
-            font-family: 'Comic Sans MS', cursive;
+            font-family: 'Comic Neue', 'Comic Sans MS', cursive;
             color: #8a6a7a;
         }
 
@@ -300,6 +307,27 @@ permalink: /miocardio
         /* Container needs to be above falling hearts */
         .container {
             z-index: 1;
+        }
+
+        /* Cursor trail hearts */
+        .cursor-heart {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            font-size: 16px;
+            animation: cursorTrail 0.8s ease-out forwards;
+            user-select: none;
+        }
+
+        @keyframes cursorTrail {
+            0% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.3) translateY(20px);
+            }
         }
     </style>
 </head>
@@ -447,6 +475,28 @@ permalink: /miocardio
         for (let i = 0; i < 5; i++) {
             setTimeout(spawnHeart, i * 100);
         }
+
+        // Cursor trail
+        const TRAIL_HEARTS = ['❤', '💕', '💗', '💖', '♥', '🩷'];
+        const TRAIL_COLORS = ['#a6dcff', '#a6ffc8', '#ffc376', '#da93ff', '#fff880', '#ff9ff9'];
+        let lastTrailTime = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            const now = Date.now();
+            if (now - lastTrailTime < 50) return; // throttle
+            lastTrailTime = now;
+
+            const heart = document.createElement('span');
+            heart.className = 'cursor-heart';
+            heart.textContent = TRAIL_HEARTS[Math.floor(Math.random() * TRAIL_HEARTS.length)];
+            heart.style.left = e.clientX + 'px';
+            heart.style.top = e.clientY + 'px';
+            heart.style.color = TRAIL_COLORS[Math.floor(Math.random() * TRAIL_COLORS.length)];
+
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 800);
+        });
     </script>
 </body>
 </html>
