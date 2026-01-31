@@ -426,7 +426,7 @@ permalink: /miocardio
             const img = document.getElementById('resultImage');
             const card = document.getElementById('resultCard');
             card.classList.add('loading');
-            img.src = '{{ "/assets/images/miocardio/card-" | relative_url }}' + cardNumber + '.jpg';
+            img.src = '{{ "/assets/images/miocardio/" | relative_url }}' + cardNumber + '.jpg';
             showScreen(4);
         }
 
