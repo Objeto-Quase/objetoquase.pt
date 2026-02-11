@@ -356,27 +356,36 @@ permalink: /miocardio
         <div id="question1" class="screen">
             <p class="question-number">pergunta 1 de 3</p>
             <div class="tiny-hearts">❤ ❤ ❤</div>
-            <h2 class="question-text">Pergunta A vai aqui?</h2>
-            <button class="btn btn-positive" onclick="answer(0, 1)">SIM ❤</button>
-            <button class="btn btn-negative" onclick="answer(0, 0)">NÃO 💔</button>
+            <h2 class="question-text">Passaste o São Valentim com baby boo?</h2>
+            <button class="btn btn-positive" onclick="answer(0, 1)">Óbvio, não ando aqui a brincar 😏</button>
+            <button class="btn btn-negative" onclick="answer(0, 0)">Quem me dera 💔</button>
         </div>
 
-        <!-- Question 2 -->
-        <div id="question2" class="screen">
+        <!-- Question 2a (shown if Q1 = yes) -->
+        <div id="question2a" class="screen">
             <p class="question-number">pergunta 2 de 3</p>
             <div class="tiny-hearts">❤ ❤ ❤</div>
-            <h2 class="question-text">Pergunta B vai aqui?</h2>
-            <button class="btn btn-positive" onclick="answer(1, 1)">SIM ❤</button>
-            <button class="btn btn-negative" onclick="answer(1, 0)">NÃO 💔</button>
+            <h2 class="question-text">Quem é que tomou a iniciativa?</h2>
+            <button class="btn btn-positive" onclick="answer(1, 1)">Eu, claro 😎</button>
+            <button class="btn btn-negative" onclick="answer(1, 0)">Nem tive hipótese 🥹</button>
+        </div>
+
+        <!-- Question 2b (shown if Q1 = no) -->
+        <div id="question2b" class="screen">
+            <p class="question-number">pergunta 2 de 3</p>
+            <div class="tiny-hearts">❤ ❤ ❤</div>
+            <h2 class="question-text">Mas tens um date à vista?</h2>
+            <button class="btn btn-positive" onclick="answer(1, 1)">Quase! 👀</button>
+            <button class="btn btn-negative" onclick="answer(1, 0)">Quem me dera (outra vez) 💔</button>
         </div>
 
         <!-- Question 3 -->
         <div id="question3" class="screen">
             <p class="question-number">pergunta 3 de 3</p>
             <div class="tiny-hearts">❤ ❤ ❤</div>
-            <h2 class="question-text">Pergunta C vai aqui?</h2>
-            <button class="btn btn-positive" onclick="answer(2, 1)">SIM ❤</button>
-            <button class="btn btn-negative" onclick="answer(2, 0)">NÃO 💔</button>
+            <h2 class="question-text">Já ouviste o nosso último single 'Miocárdio'?</h2>
+            <button class="btn btn-positive" onclick="answer(2, 1)">Ya, já ouvi 20 vezes 🎵</button>
+            <button class="btn btn-negative" onclick="answer(2, 0)">Zé perdoa-me, ainda não mas vou ouvir agora!</button>
         </div>
 
         <!-- Result Screen -->
@@ -395,43 +404,43 @@ permalink: /miocardio
 
     <script>
         const answers = [0, 0, 0];
-        const screens = ['intro', 'question1', 'question2', 'question3', 'result'];
-        let currentScreen = 0;
+        const allScreens = ['intro', 'question1', 'question2a', 'question2b', 'question3', 'result'];
 
-        function showScreen(index) {
-            screens.forEach((id, i) => {
-                document.getElementById(id).classList.toggle('active', i === index);
+        function showScreen(id) {
+            allScreens.forEach(s => {
+                document.getElementById(s).classList.toggle('active', s === id);
             });
-            currentScreen = index;
         }
 
         function startQuiz() {
             answers[0] = 0;
             answers[1] = 0;
             answers[2] = 0;
-            showScreen(1);
+            showScreen('question1');
         }
 
         function answer(questionIndex, value) {
             answers[questionIndex] = value;
-            if (questionIndex < 2) {
-                showScreen(currentScreen + 1);
+            if (questionIndex === 0) {
+                showScreen(value === 1 ? 'question2a' : 'question2b');
+            } else if (questionIndex === 1) {
+                showScreen('question3');
             } else {
                 showResult();
             }
         }
 
         function showResult() {
-            const cardNumber = (answers[0] * 4) + (answers[1] * 2) + answers[2] + 1;
+            const cardNumber = 8 - ((answers[0] * 4) + (answers[1] * 2) + answers[2]);
             const img = document.getElementById('resultImage');
             const card = document.getElementById('resultCard');
             card.classList.add('loading');
             img.src = '{{ "/assets/images/miocardio/" | relative_url }}' + cardNumber + '.jpg';
-            showScreen(4);
+            showScreen('result');
         }
 
         function restart() {
-            showScreen(0);
+            showScreen('intro');
         }
 
         // Falling hearts animation
