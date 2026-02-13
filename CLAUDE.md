@@ -19,6 +19,12 @@ bundle exec jekyll serve
 bundle exec jekyll build
 ```
 
+## Deployment
+
+The site is deployed to GitHub Pages via GitHub Actions (`.github/workflows/jekyll.yml`). The workflow builds with Jekyll 4 and deploys automatically on push to `main`.
+
+GitHub Pages **Source** must be set to **"GitHub Actions"** in repo Settings > Pages (not "Deploy from a branch").
+
 ## Architecture
 
 Single-page website with anchor navigation. All sections are included in `index.md`.

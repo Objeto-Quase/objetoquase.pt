@@ -1,4 +1,6 @@
 source "https://rubygems.org"
 
-gem "github-pages", group: :jekyll_plugins
+gem "jekyll", "~> 4.4"
 gem "jekyll-seo-tag"
+gem "kramdown-parser-gfm"
+gem "webrick"
