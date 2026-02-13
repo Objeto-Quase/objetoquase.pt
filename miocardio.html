@@ -309,6 +309,84 @@ permalink: /miocardio
             z-index: 1;
         }
 
+        /* Share modal */
+        .share-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .share-modal.active {
+            display: flex;
+        }
+
+        .share-modal-card {
+            background-color: #f5e1e7;
+            border: 4px solid #c44d78;
+            padding: 30px 25px;
+            max-width: 360px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 3px 3px 0 #00000033;
+        }
+
+        .share-modal-title {
+            font-family: 'Comic Neue', 'Comic Sans MS', cursive;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #a83a5c;
+            margin-bottom: 20px;
+        }
+
+        .share-steps {
+            text-align: left;
+            list-style: none;
+            counter-reset: step;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        .share-steps li {
+            font-family: 'Comic Neue', 'Comic Sans MS', cursive;
+            font-size: 1.05rem;
+            color: #6a4a5a;
+            padding: 8px 0;
+            counter-increment: step;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .share-steps li::before {
+            content: counter(step) ".";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            color: #c44d78;
+        }
+
+        .share-steps li strong {
+            color: #a83a5c;
+        }
+
+        .btn-close-modal {
+            background-color: #c44d78;
+            color: #FFF;
+            display: inline-block;
+            width: auto;
+            padding: 12px 30px;
+            border-color: #8a3355;
+            font-size: 1.1rem;
+        }
+
         /* Cursor trail hearts */
         .cursor-heart {
             position: fixed;
@@ -395,10 +473,25 @@ permalink: /miocardio
                 <img id="resultImage" src="" alt="O teu cartão do amor" onload="this.parentElement.classList.remove('loading')">
             </div>
             <p class="share-text">partilha o teu resultado!!</p>
-            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="btn btn-instagram">
+            <button class="btn btn-instagram" onclick="shareToInstagram()">
                 Partilhar no Instagram
-            </a>
+            </button>
             <button class="btn btn-restart" onclick="restart()">jogar outra vez ❤</button>
+        </div>
+    </div>
+
+    <!-- Share instruction modal -->
+    <div id="shareModal" class="share-modal" onclick="if(event.target===this)closeShareModal()">
+        <div class="share-modal-card">
+            <p class="share-modal-title">agora adiciona a musica!</p>
+            <ol class="share-steps">
+                <li>Abre os Instagram Stories</li>
+                <li>Adiciona a imagem que guardaste</li>
+                <li>Toca no sticker de musica</li>
+                <li>Pesquisa <strong>"Miocardio" - Objeto Quase</strong></li>
+                <li>Partilha!</li>
+            </ol>
+            <button class="btn btn-close-modal" onclick="closeShareModal()">entendido!</button>
         </div>
     </div>
 
@@ -441,6 +534,45 @@ permalink: /miocardio
 
         function restart() {
             showScreen('intro');
+        }
+
+        async function shareToInstagram() {
+            const img = document.getElementById('resultImage');
+            try {
+                const response = await fetch(img.src);
+                const blob = await response.blob();
+                const file = new File([blob], 'miocardio.jpg', { type: 'image/jpeg' });
+
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({ files: [file] });
+                } else {
+                    // Fallback: download the image
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = 'miocardio.jpg';
+                    a.click();
+                    URL.revokeObjectURL(a.href);
+                }
+            } catch (err) {
+                if (err.name === 'AbortError') {
+                    // User cancelled the share — still show modal
+                } else {
+                    // Fallback: download
+                    const a = document.createElement('a');
+                    a.href = img.src;
+                    a.download = 'miocardio.jpg';
+                    a.click();
+                }
+            }
+            showShareModal();
+        }
+
+        function showShareModal() {
+            document.getElementById('shareModal').classList.add('active');
+        }
+
+        function closeShareModal() {
+            document.getElementById('shareModal').classList.remove('active');
         }
 
         // Falling hearts animation
