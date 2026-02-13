@@ -29,6 +29,7 @@ body {
   color: $text-color;
   line-height: 1.6;
   font-size: 16px;
+  overflow-x: hidden;
 }
 
 // Container
@@ -398,6 +399,8 @@ a {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .gallery-item {
@@ -418,6 +421,15 @@ a {
 
   &.gallery-item-wide {
     grid-column: span 2;
+  }
+
+  &.gallery-item-tall {
+    grid-row: span 2;
+    aspect-ratio: auto;
+  }
+
+  &.gallery-item-fill {
+    aspect-ratio: auto;
   }
 }
 
@@ -473,5 +485,17 @@ a {
 
   .gallery-item.gallery-item-wide {
     grid-column: span 2;
+  }
+
+  .gallery-item.gallery-item-wide.gallery-item-tall {
+    grid-row: span 1;
+  }
+
+  .gallery-item.gallery-item-wide-mobile {
+    grid-column: span 2;
+  }
+
+  .gallery-item.gallery-item-fill {
+    aspect-ratio: 16/10;
   }
 }
