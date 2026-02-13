@@ -189,6 +189,18 @@ permalink: /miocardio
             border-color: #8a4a60;
         }
 
+        .btn-spotify {
+            background-color: #1db954;
+            color: white;
+            border-color: #17a34a;
+        }
+
+        .btn-youtube {
+            background-color: #ff0000;
+            color: white;
+            border-color: #cc0000;
+        }
+
         .btn-restart {
             background-color: #c9b3c0;
             color: #4a3a45;
@@ -498,6 +510,15 @@ permalink: /miocardio
             <button class="btn btn-negative" onclick="answer(2, 0)">Zé perdoa-me, ainda não mas vou ouvir agora!</button>
         </div>
 
+        <!-- Listen Screen (shown if user hasn't heard the single) -->
+        <div id="listen" class="screen">
+            <div class="tiny-hearts">❤ ❤ ❤</div>
+            <h2 class="question-text">Mas estás tolo? Ouve já!</h2>
+            <a href="https://open.spotify.com/track/7FSAo6xKt7hbyG0UNIY19m?si=e7d2b70a81fa40be" target="_blank" class="btn btn-spotify">Ouvir no Spotify</a>
+            <a href="https://www.youtube.com/watch?v=vWH6-RtGJ90" target="_blank" class="btn btn-youtube">Ouvir no YouTube</a>
+            <button class="btn btn-restart" onclick="showResult()" style="margin-top: 20px;">ver o meu resultado</button>
+        </div>
+
         <!-- Result Screen -->
         <div id="result" class="screen">
             <p class="result-title"><span class="sparkle">★</span> o teu cartão: <span class="sparkle">★</span></p>
@@ -529,7 +550,7 @@ permalink: /miocardio
 
     <script>
         const answers = [0, 0, 0];
-        const allScreens = ['intro', 'question1', 'question2a', 'question2b', 'question3', 'result'];
+        const allScreens = ['intro', 'question1', 'question2a', 'question2b', 'question3', 'listen', 'result'];
 
         function showScreen(id) {
             allScreens.forEach(s => {
@@ -552,7 +573,11 @@ permalink: /miocardio
             } else if (questionIndex === 1) {
                 showScreen('question3');
             } else {
-                showResult();
+                if (value === 0) {
+                    showScreen('listen');
+                } else {
+                    showResult();
+                }
             }
         }
 
