@@ -279,7 +279,7 @@ permalink: /miocardio
             position: fixed;
             pointer-events: none;
             z-index: 0;
-            animation: fall linear forwards;
+            animation: fall 8s linear infinite;
             opacity: 0.75;
         }
 
@@ -296,7 +296,7 @@ permalink: /miocardio
 
         @keyframes fall {
             0% {
-                transform: translateX(-150px) rotate(0deg);
+                transform: translateX(-150px) rotate(-90deg);
                 opacity: 0;
             }
             10% {
@@ -306,7 +306,7 @@ permalink: /miocardio
                 opacity: 0.7;
             }
             100% {
-                transform: translateX(calc(100vw + 150px)) rotate(var(--rotation, 360deg));
+                transform: translateX(calc(100vw + 150px)) rotate(calc(-90deg + var(--rotation, 360deg)));
                 opacity: 0;
             }
         }
@@ -611,13 +611,14 @@ permalink: /miocardio
             document.getElementById('shareModal').classList.remove('active');
         }
 
-        // Falling hearts animation (left to right, hearts only, bigger)
+        // Falling hearts animation (left to right, 8s loop, hearts only, bigger)
         const HEART_COUNT = 13;
-        const SPAWN_INTERVAL = 200; // ms between spawns
+        const TOTAL_HEARTS = 30;
         const HEARTS_PATH = '{{ "/assets/images/miocardio/hearts/" | relative_url }}';
         const PASTEL_COLORS = ['heart-blue', 'heart-green', 'heart-orange', 'heart-purple', 'heart-yellow', 'heart-pink'];
 
-        function spawnHeart() {
+        // Pre-create all hearts with staggered delays
+        for (let i = 0; i < TOTAL_HEARTS; i++) {
             const heart = document.createElement('img');
 
             const designNum = Math.floor(Math.random() * HEART_COUNT) + 1;
@@ -626,30 +627,19 @@ permalink: /miocardio
 
             // Bigger hearts: 80-200px
             const size = 80 + Math.random() * 120;
-            const duration = 4 + Math.random() * 4; // 4-8 seconds
             const yPos = Math.random() * 100; // 0-100% from top
             const rotation = (Math.random() - 0.5) * 720; // -360 to 360 deg
+            // Negative delay so hearts start spread across the cycle
+            const delay = -(Math.random() * 8);
 
             heart.style.width = size + 'px';
             heart.style.height = 'auto';
             heart.style.left = '-150px';
             heart.style.top = yPos + '%';
             heart.style.setProperty('--rotation', rotation + 'deg');
-            heart.style.animationDuration = duration + 's';
+            heart.style.animationDelay = delay + 's';
 
             document.body.appendChild(heart);
-
-            // Remove after animation ends
-            setTimeout(() => {
-                heart.remove();
-            }, duration * 1000 + 100);
-        }
-
-        // Start spawning hearts
-        setInterval(spawnHeart, SPAWN_INTERVAL);
-        // Spawn a few immediately
-        for (let i = 0; i < 5; i++) {
-            setTimeout(spawnHeart, i * 100);
         }
 
         // Cursor trail

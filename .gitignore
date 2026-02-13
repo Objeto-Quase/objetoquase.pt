@@ -1,0 +1,7 @@
+_site/
+.frames/
+miocardio.mp4
+node_modules/
+package.json
+package-lock.json
+record-miocardio.js
