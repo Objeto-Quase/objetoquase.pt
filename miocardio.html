@@ -536,15 +536,13 @@ permalink: /miocardio
     <!-- Share instruction modal -->
     <div id="shareModal" class="share-modal" onclick="if(event.target===this)closeShareModal()">
         <div class="share-modal-card">
-            <p class="share-modal-title">agora adiciona a musica!</p>
+            <p class="share-modal-title">Como partilhar:</p>
             <ol class="share-steps">
-                <li>Abre os Instagram Stories</li>
-                <li>Adiciona a imagem que guardaste</li>
-                <li>Toca no sticker de musica</li>
-                <li>Pesquisa <strong>"Miocardio" - Objeto Quase</strong></li>
-                <li>Partilha!</li>
+                <li>Abre o post no botão em baixo</li>
+                <li>Partilha para a tua story</li>
+                <li><strong>Não te esqueças de identificar os @objeto_quase!</strong></li>
             </ol>
-            <button class="btn btn-close-modal" onclick="closeShareModal()">entendido!</button>
+            <a id="shareModalLink" href="" target="_blank" class="btn btn-close-modal" onclick="closeShareModal()">abrir no Instagram</a>
         </div>
     </div>
 
@@ -582,11 +580,11 @@ permalink: /miocardio
         }
 
         function showResult() {
-            const cardNumber = 8 - ((answers[0] * 4) + (answers[1] * 2) + answers[2]);
+            currentCardNumber = 8 - ((answers[0] * 4) + (answers[1] * 2) + answers[2]);
             const img = document.getElementById('resultImage');
             const card = document.getElementById('resultCard');
             card.classList.add('loading');
-            img.src = '{{ "/assets/images/miocardio/" | relative_url }}' + cardNumber + '.jpg';
+            img.src = '{{ "/assets/images/miocardio/" | relative_url }}' + currentCardNumber + '.jpg';
             showScreen('result');
         }
 
@@ -594,34 +592,22 @@ permalink: /miocardio
             showScreen('intro');
         }
 
-        async function shareToInstagram() {
-            const img = document.getElementById('resultImage');
-            try {
-                const response = await fetch(img.src);
-                const blob = await response.blob();
-                const file = new File([blob], 'miocardio.jpg', { type: 'image/jpeg' });
+        const INSTAGRAM_URLS = {
+            1: 'https://www.instagram.com/p/DUrdFTYCLCG/',
+            2: 'https://www.instagram.com/p/DUreRkSiMuw/',
+            3: 'https://www.instagram.com/p/DUrec56iA1E/',
+            4: 'https://www.instagram.com/p/DUregeDCITI/',
+            5: 'https://www.instagram.com/p/DUrepCeiCnY/',
+            6: 'https://www.instagram.com/p/DUretE_iBp1/',
+            7: 'https://www.instagram.com/p/DUre0jtiKdG/',
+            8: 'https://www.instagram.com/p/DUre4wAiH5F/'
+        };
 
-                if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    await navigator.share({ files: [file] });
-                } else {
-                    // Fallback: download the image
-                    const a = document.createElement('a');
-                    a.href = URL.createObjectURL(blob);
-                    a.download = 'miocardio.jpg';
-                    a.click();
-                    URL.revokeObjectURL(a.href);
-                }
-            } catch (err) {
-                if (err.name === 'AbortError') {
-                    // User cancelled the share — still show modal
-                } else {
-                    // Fallback: download
-                    const a = document.createElement('a');
-                    a.href = img.src;
-                    a.download = 'miocardio.jpg';
-                    a.click();
-                }
-            }
+        let currentCardNumber = 1;
+
+        function shareToInstagram() {
+            const url = INSTAGRAM_URLS[currentCardNumber];
+            document.getElementById('shareModalLink').href = url;
             showShareModal();
         }
 
