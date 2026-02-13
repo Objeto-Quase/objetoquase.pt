@@ -34,15 +34,7 @@ permalink: /miocardio
         }
 
         .container {
-            max-width: 400px;
-            width: 100%;
-            text-align: center;
-            background-color: #f5e1e7; /* slightly off-white pink */
-            border: 4px solid #c44d78;
-            padding: 30px 20px;
-            position: relative;
-            /* slight imperfection */
-            box-shadow: 3px 3px 0 #00000033;
+            display: none;
         }
 
         /* Ugly hearts scattered around */
@@ -304,7 +296,7 @@ permalink: /miocardio
 
         @keyframes fall {
             0% {
-                transform: translateY(-100px) rotate(0deg);
+                transform: translateX(-150px) rotate(0deg);
                 opacity: 0;
             }
             10% {
@@ -314,7 +306,7 @@ permalink: /miocardio
                 opacity: 0.7;
             }
             100% {
-                transform: translateY(calc(100vh + 100px)) rotate(var(--rotation, 360deg));
+                transform: translateX(calc(100vw + 150px)) rotate(var(--rotation, 360deg));
                 opacity: 0;
             }
         }
@@ -452,7 +444,7 @@ permalink: /miocardio
         }
     </style>
 </head>
-<body class="has-mascot">
+<body>
     <div class="container">
         <!-- Ugly hearts -->
         <span class="heart heart-1">❤</span>
@@ -619,40 +611,29 @@ permalink: /miocardio
             document.getElementById('shareModal').classList.remove('active');
         }
 
-        // Falling hearts animation
+        // Falling hearts animation (left to right, hearts only, bigger)
         const HEART_COUNT = 13;
-        const ZES_IMAGES = [14, 15, 16];
-        const SPAWN_INTERVAL = 250; // ms between spawns (faster!)
+        const SPAWN_INTERVAL = 200; // ms between spawns
         const HEARTS_PATH = '{{ "/assets/images/miocardio/hearts/" | relative_url }}';
-        const ZES_PATH = '{{ "/assets/images/miocardio/zes/" | relative_url }}';
         const PASTEL_COLORS = ['heart-blue', 'heart-green', 'heart-orange', 'heart-purple', 'heart-yellow', 'heart-pink'];
-        const BOLD_COLORS = ['bold-white'];
 
         function spawnHeart() {
             const heart = document.createElement('img');
 
-            // ~20% chance to spawn a zes drawing instead of a heart
-            var isZe = Math.random() < 0.25;
-            if (isZe) {
-                const zeNum = ZES_IMAGES[Math.floor(Math.random() * ZES_IMAGES.length)];
-                heart.src = ZES_PATH + zeNum + '.png';
-            } else {
-                const designNum = Math.floor(Math.random() * HEART_COUNT) + 1;
-                heart.src = HEARTS_PATH + designNum + '.png';
-            }
-            const colors = isZe ? BOLD_COLORS : PASTEL_COLORS;
-            heart.className = 'falling-heart ' + colors[Math.floor(Math.random() * colors.length)];
+            const designNum = Math.floor(Math.random() * HEART_COUNT) + 1;
+            heart.src = HEARTS_PATH + designNum + '.png';
+            heart.className = 'falling-heart ' + PASTEL_COLORS[Math.floor(Math.random() * PASTEL_COLORS.length)];
 
-            // Random properties — zes are bigger
-            const size = isZe ? (100 + Math.random() * 120) : (30 + Math.random() * 50); // zes: 100-220px, hearts: 30-80px
+            // Bigger hearts: 80-200px
+            const size = 80 + Math.random() * 120;
             const duration = 4 + Math.random() * 4; // 4-8 seconds
-            const xPos = Math.random() * 100; // 0-100% from left
+            const yPos = Math.random() * 100; // 0-100% from top
             const rotation = (Math.random() - 0.5) * 720; // -360 to 360 deg
 
             heart.style.width = size + 'px';
             heart.style.height = 'auto';
-            heart.style.left = xPos + '%';
-            heart.style.top = '-100px';
+            heart.style.left = '-150px';
+            heart.style.top = yPos + '%';
             heart.style.setProperty('--rotation', rotation + 'deg');
             heart.style.animationDuration = duration + 's';
 
